@@ -94,16 +94,6 @@
   .count{font-size:0.82rem; color:var(--muted);}
   .section-hint{font-size:0.78rem; color:var(--muted); margin:0 4px 18px;}
 
-  .debug-box{
-    font-family:'DM Mono', 'Courier New', monospace;
-    font-size:0.72rem; line-height:1.5; color:var(--ink);
-    background:var(--paper-2); border-radius:10px; padding:10px 12px;
-    margin:-24px 0 30px; white-space:pre-wrap; word-break:break-all;
-    max-height:160px; overflow-y:auto;
-  }
-
-  .loading{text-align:center; color:var(--muted); padding:40px 0; font-size:0.9rem;}
-
   .banner{
     display:none;
     background:#FFF3CD; color:#7A5B00; border:1px solid #FFE29A;
@@ -236,8 +226,6 @@
       </div>
     </form>
 
-    <div class="debug-box" id="debugBox">🔧 디버그: 대기 중...</div>
-
     <div class="section-head">
       <h2>타임라인</h2>
       <span class="count" id="countText"></span>
@@ -259,13 +247,12 @@
 <script>
 (function(){
   const SVG_NS = 'http://www.w3.org/2000/svg';
-  const STORAGE_KEY = 'timeline-events';
+  const STORAGE_KEY = 'history-timeline-data';
 
   let events = [];
   let connections = [];
   let linkingFromId = null;
   let pendingToId = null;
-  let storageAvailable = false;
 
   const mainArea = document.getElementById('mainArea');
   const countText = document.getElementById('countText');
@@ -274,19 +261,6 @@
   const eventInput = document.getElementById('eventInput');
   const hintText = document.getElementById('hintText');
   const saveBanner = document.getElementById('saveBanner');
-  const debugBox = document.getElementById('debugBox');
-
-  function logDebug(msg){
-    try{
-      const time = new Date().toLocaleTimeString('ko-KR', {hour12:false});
-      const line = `[${time}] ${msg}`;
-      const lines = debugBox.textContent.split('\n').filter(l => l && l !== '🔧 디버그: 대기 중...');
-      lines.push(line);
-      while(lines.length > 8) lines.shift();
-      debugBox.textContent = lines.join('\n');
-      debugBox.scrollTop = debugBox.scrollHeight;
-    }catch(e){ /* 디버그 표시 자체가 실패해도 앱은 계속 동작해야 함 */ }
-  }
 
   const linkBar = document.getElementById('linkBar');
   const linkBarText = document.getElementById('linkBarText');
@@ -296,37 +270,23 @@
 
   const tapeColors = ['#FF6B6B', '#FFD166', '#06B889', '#8B7FE8'];
 
-  // ----- 버튼/폼 동작을 가장 먼저 연결 (저장소 관련 코드보다 먼저) -----
-  // 이렇게 해두면 저장 기능에 무슨 문제가 생기더라도 "기록 추가" 버튼 자체는 항상 반응함
-
+  // ----- 버튼/폼 동작을 가장 먼저 연결 -----
   addForm.addEventListener('submit', function(e){
     e.preventDefault();
     handleAddSubmit();
   });
 
-  linkCancelBtn.addEventListener('click', function(){
-    resetLinking();
-  });
-
-  linkConfirmBtn.addEventListener('click', function(){
-    handleLinkConfirm();
-  });
-
+  linkCancelBtn.addEventListener('click', function(){ resetLinking(); });
+  linkConfirmBtn.addEventListener('click', function(){ handleLinkConfirm(); });
   linkLabelInput.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){
-      e.preventDefault();
-      linkConfirmBtn.click();
-    }
+    if(e.key === 'Enter'){ e.preventDefault(); linkConfirmBtn.click(); }
   });
-
   window.addEventListener('resize', function(){
     clearTimeout(window.__tlResizeTimer);
     window.__tlResizeTimer = setTimeout(function(){
       if(connections.length > 0) drawStrings();
     }, 150);
   });
-
-  // ----- 아래는 일반 함수 정의들 -----
 
   function yearLabel(ev){ return ev.year + '년'; }
 
@@ -338,15 +298,11 @@
     saveBanner.classList.remove('show');
   }
 
-  async function loadData(){
-    if(!storageAvailable){
-      showBanner('⚠️ 이 화면에서는 자동 저장이 지원되지 않아요. 지금 추가하는 기록은 새로고침하면 사라져요.');
-      return;
-    }
+  function loadData(){
     try{
-      const res = await window.storage.get(STORAGE_KEY, false);
-      if(res && res.value){
-        const parsed = JSON.parse(res.value);
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if(raw){
+        const parsed = JSON.parse(raw);
         if(Array.isArray(parsed)){
           events = parsed;
           connections = [];
@@ -356,21 +312,16 @@
         }
       }
     }catch(e){
-      // 저장된 기록이 아직 없는 경우 (처음 사용) — 빈 상태로 시작, 정상 상황
+      showBanner('⚠️ 저장된 기록을 불러오지 못했어요 (브라우저 저장 기능이 꺼져있을 수 있어요).');
     }
   }
 
-  async function saveData(){
-    if(!storageAvailable) return;
+  function saveData(){
     try{
-      const result = await window.storage.set(STORAGE_KEY, JSON.stringify({events, connections}), false);
-      if(!result){
-        showBanner('⚠️ 방금 변경 사항이 저장되지 않았어요. 새로고침하면 사라질 수 있어요.');
-      }else{
-        hideBanner();
-      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({events, connections}));
+      hideBanner();
     }catch(e){
-      showBanner('⚠️ 저장 중 오류가 발생했어요: ' + (e && e.message ? e.message : '알 수 없는 오류'));
+      showBanner('⚠️ 저장에 실패했어요: ' + (e && e.message ? e.message : '알 수 없는 오류'));
     }
   }
 
@@ -406,7 +357,7 @@
     }
   }
 
-  async function handleLinkConfirm(){
+  function handleLinkConfirm(){
     if(linkingFromId === null || pendingToId === null) return;
     connections.push({
       id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
@@ -416,7 +367,7 @@
     });
     resetLinking();
     render();
-    await saveData();
+    saveData();
   }
 
   function drawStrings(){
@@ -473,10 +424,10 @@
       tag.style.top = midY + 'px';
       tag.textContent = conn.label ? conn.label : '🔗';
       tag.title = '클릭하면 연결 삭제';
-      tag.addEventListener('click', async () => {
+      tag.addEventListener('click', () => {
         connections = connections.filter(c => c.id !== conn.id);
         render();
-        await saveData();
+        saveData();
       });
       labelLayer.appendChild(tag);
     });
@@ -568,86 +519,50 @@
     requestAnimationFrame(drawStrings);
   }
 
-  async function deleteEvent(id){
+  function deleteEvent(id){
     events = events.filter(ev => ev.id !== id);
     connections = connections.filter(c => c.fromId !== id && c.toId !== id);
     if(linkingFromId === id || pendingToId === id) resetLinking();
     render();
-    await saveData();
+    saveData();
   }
 
-  async function handleAddSubmit(){
-    try{
-      const yearRawFull = yearInput.value;
-      const nameFull = eventInput.value;
-      const yearRaw = yearRawFull.trim();
-      const name = nameFull.trim();
+  function handleAddSubmit(){
+    const yearRaw = yearInput.value.trim();
+    const name = eventInput.value.trim();
 
-      logDebug(`제출: year="${yearRawFull}"(길이 ${yearRawFull.length}) name="${nameFull}"(길이 ${nameFull.length})`);
-
-      if(!yearRaw || !name){
-        hintText.textContent = '연도와 사건 이름을 모두 입력해주세요';
-        hintText.classList.add('error');
-        logDebug('→ 중단: 연도 또는 이름이 비어있음');
-        return;
-      }
-      if(!/^\d+$/.test(yearRaw)){
-        hintText.textContent = '연도는 숫자만 입력해주세요';
-        hintText.classList.add('error');
-        logDebug('→ 중단: 연도가 숫자 형식이 아님 ("' + yearRaw + '")');
-        return;
-      }
-      const year = parseInt(yearRaw, 10);
-
-      hintText.textContent = '연도 → 사건 이름 순서로 입력해요';
-      hintText.classList.remove('error');
-
-      events.push({
-        id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
-        year: year,
-        name: name
-      });
-
-      logDebug(`→ 배열에 추가됨 (현재 총 ${events.length}개), 화면 그리기 시도...`);
-      render();
-      logDebug('→ 화면 그리기 완료');
-
-      eventInput.value = '';
-      yearInput.value = '';
-      yearInput.focus();
-
-      await saveData();
-      logDebug('→ 저장 시도 완료 (저장소 가능여부: ' + storageAvailable + ')');
-    }catch(e){
-      logDebug('🚨 예외 발생: ' + (e && e.message ? e.message : e));
-      console.error(e);
+    if(!yearRaw || !name){
+      hintText.textContent = '연도와 사건 이름을 모두 입력해주세요';
+      hintText.classList.add('error');
+      return;
     }
+    if(!/^\d+$/.test(yearRaw)){
+      hintText.textContent = '연도는 숫자만 입력해주세요';
+      hintText.classList.add('error');
+      return;
+    }
+    const year = parseInt(yearRaw, 10);
+
+    hintText.textContent = '연도 → 사건 이름 순서로 입력해요';
+    hintText.classList.remove('error');
+
+    events.push({
+      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      year: year,
+      name: name
+    });
+
+    render();
+
+    eventInput.value = '';
+    yearInput.value = '';
+    yearInput.focus();
+
+    saveData();
   }
 
-  // ----- 초기화: 저장소 관련 코드는 여기서부터, 전부 try/catch로 감쌈 -----
-  (async function init(){
-    try{
-      storageAvailable = (typeof window.storage !== 'undefined' && window.storage !== null);
-    }catch(e){
-      storageAvailable = false;
-    }
-    logDebug('초기화: 저장소 사용 가능 = ' + storageAvailable);
-
-    try{
-      await loadData();
-      logDebug('불러오기 완료: 사건 ' + events.length + '개, 연결 ' + connections.length + '개');
-    }catch(e){
-      logDebug('🚨 불러오기 실패: ' + (e && e.message ? e.message : e));
-      console.error('불러오기 실패', e);
-    }
-
-    try{
-      render();
-    }catch(e){
-      console.error('렌더링 실패', e);
-      mainArea.innerHTML = '<div class="empty-state"><p>화면을 그리는 중 문제가 발생했어요.<br>새로고침해서 다시 열어봐 주세요.</p></div>';
-    }
-  })();
+  loadData();
+  render();
 })();
 </script>
 </body>
