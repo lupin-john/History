@@ -54,7 +54,7 @@
     padding:24px 20px 20px;
     box-shadow:var(--shadow);
     position:relative;
-    margin-bottom:44px;
+    margin-bottom:36px;
   }
   .add-card::before{
     content:'';
@@ -108,9 +108,6 @@
   .count{font-size:0.82rem; color:var(--muted);}
   .section-hint{font-size:0.78rem; color:var(--muted); margin:0 4px 18px;}
 
-  .search-row{margin-bottom:18px;}
-  .search-row input{width:100%;}
-
   .banner{
     display:none;
     background:#F3E0B8; color:#5C3A12; border:1px solid rgba(107,68,35,0.4);
@@ -119,30 +116,19 @@
   }
   .banner.show{display:block;}
 
-  .timeline-wrap{position:relative;}
-  .string-layer{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
-  .label-layer{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;}
-  .string-tag{
-    position:absolute; transform:translate(-50%,-50%) rotate(-1.5deg);
-    background:var(--card); color:var(--ink); font-size:0.68rem; font-weight:700;
-    padding:3px 9px; border-radius:3px; border:1px solid var(--seal);
-    box-shadow:var(--shadow);
-    pointer-events:auto; cursor:pointer; white-space:nowrap;
-    max-width:130px; overflow:hidden; text-overflow:ellipsis;
-    transition:background .12s, color .12s;
-  }
-  .string-tag:hover{background:var(--seal); color:var(--card);}
+  .search-row{margin-bottom:18px;}
+  .search-row input{width:100%;}
 
-  .timeline-list{position:relative; padding:4px 0; width:calc(100% - 60px);}
+  .timeline-list{position:relative; padding:4px 0;}
   .timeline-list::before{
     content:'';
     position:absolute;
-    left:27px; top:4px; bottom:4px; width:2px;
+    left:21px; top:4px; bottom:4px; width:2px;
     background:repeating-linear-gradient(to bottom, var(--spine) 0 8px, transparent 8px 16px);
     border-radius:2px;
   }
 
-  .event-row{display:flex; gap:13px; align-items:flex-start; position:relative; margin-bottom:30px;}
+  .event-row{display:flex; gap:13px; align-items:flex-start; position:relative; margin-bottom:16px;}
   .event-row:last-child{margin-bottom:0;}
 
   .year-badge{
@@ -160,41 +146,31 @@
     position:relative; min-width:0;
   }
 
-  .card .event-name{font-weight:700; font-size:0.9rem; word-break:keep-all; padding-right:48px;}
+  .card .event-name{font-weight:700; font-size:0.9rem; word-break:keep-all; padding-right:26px;}
   .card .event-year-label{font-size:0.68rem; color:var(--muted); margin-top:2px;}
   .card .event-category{display:inline-flex; align-items:center; gap:5px; font-size:0.66rem; color:var(--muted); margin-top:5px;}
   .card .event-category .dot{width:7px; height:7px; border-radius:50%; flex-shrink:0;}
 
   .card-actions{position:absolute; top:8px; right:8px; display:flex; gap:6px;}
-  .link-btn, .del-btn{
+  .del-btn{
     width:19px; height:19px; border-radius:50%;
     background:var(--paper-2); color:var(--muted);
     font-size:0.78rem; line-height:1; display:flex; align-items:center; justify-content:center;
     opacity:0.65; transition:opacity .12s, background .12s, color .12s;
   }
-  .link-btn:hover, .link-btn:focus-visible{opacity:1; background:var(--spine); color:var(--card);}
   .del-btn:hover, .del-btn:focus-visible{opacity:1; background:var(--seal); color:var(--card);}
 
-  .link-bar{
-    position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
-    background:var(--ink); color:var(--card);
-    padding:10px 14px; border-radius:8px;
-    display:none; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;
-    box-shadow:0 6px 20px rgba(0,0,0,0.35);
-    z-index:100; max-width:92vw;
+  .empty-state{
+    text-align:center; padding:44px 20px;
+    border:1px dashed rgba(107,68,35,0.35); border-radius:10px;
+    color:var(--muted);
   }
-  .link-bar.show{display:flex;}
-  .link-bar span{font-size:0.82rem; white-space:nowrap;}
-  .link-bar input{
-    border:none; border-radius:5px; padding:7px 12px; font-size:0.82rem;
-    width:150px; font-family:'Nanum Myeongjo', serif; touch-action:manipulation;
-  }
-  .link-bar input:focus{outline:2px solid var(--gold);}
-  .link-bar button{border-radius:5px; padding:7px 14px; font-size:0.8rem; font-weight:700; white-space:nowrap;}
-  .link-bar .confirm-btn{background:var(--seal); color:var(--card);}
-  .link-bar .cancel-btn{background:rgba(255,255,255,0.15); color:var(--card);}
+  .empty-state .ornament{margin-bottom:14px;}
+  .empty-state p{margin:0; font-size:0.92rem; line-height:1.7;}
 
-  .game-section{margin-top:6px;}
+  .category-teaser{margin-bottom:40px;}
+
+  .game-section{margin-top:10px;}
   .game-start-btn{
     display:block; width:100%;
     background:var(--spine); color:var(--card); border:1px solid var(--gold);
@@ -214,6 +190,7 @@
     padding:24px 22px;
   }
   .game-modal h3{margin:0 0 16px; font-size:1.15rem; text-align:center;}
+
   .game-mode-list{display:flex; flex-direction:column; gap:8px; margin-bottom:16px;}
   .game-mode-btn{
     display:flex; align-items:center; gap:8px; width:100%;
@@ -256,44 +233,87 @@
   .game-score{text-align:center; font-size:1.5rem; font-weight:800; margin:6px 0 6px;}
   .game-score-sub{text-align:center; font-size:0.85rem; color:var(--muted); margin-bottom:18px;}
 
-  .empty-state{
-    text-align:center; padding:44px 20px;
-    border:1px dashed rgba(107,68,35,0.35); border-radius:10px;
-    color:var(--muted);
-  }
-  .empty-state .ornament{margin-bottom:14px;}
-  .empty-state p{margin:0; font-size:0.92rem; line-height:1.7;}
-
-  .category-section{margin-bottom:40px;}
-  .category-add-new{display:flex; gap:8px; margin-bottom:14px;}
-  .category-add-new input{flex:1;}
-  .category-add-new button{
+  /* 카테고리 전용화면 */
+  .cat-add-new{display:flex; gap:8px; margin-bottom:16px;}
+  .cat-add-new input{flex:1; font-size:0.85rem; padding:9px 11px;}
+  .cat-add-new .cat-year-narrow{flex:0 0 70px;}
+  .cat-add-new button{
     background:var(--spine); color:var(--card); border:1px solid var(--gold);
-    border-radius:6px; padding:9px 16px; font-size:0.85rem; font-weight:700; flex-shrink:0;
+    border-radius:6px; padding:9px 14px; font-size:0.82rem; font-weight:700; flex-shrink:0;
   }
-  .category-list{display:flex; flex-direction:column; gap:10px;}
-  .category-card{
-    background:var(--card); border:1px solid rgba(107,68,35,0.25); border-radius:8px;
-    padding:12px 14px; box-shadow:var(--shadow);
+
+  .cat-board-wrap{position:relative;}
+  .string-layer{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+  .label-layer{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;}
+  .string-tag{
+    position:absolute; transform:translate(-50%,-50%) rotate(-1.5deg);
+    background:var(--card); color:var(--ink); font-size:0.66rem; font-weight:700;
+    padding:3px 9px; border-radius:3px; border:1px solid var(--seal);
+    box-shadow:var(--shadow);
+    pointer-events:auto; cursor:pointer; white-space:nowrap;
+    max-width:120px; overflow:hidden; text-overflow:ellipsis;
+    transition:background .12s, color .12s;
   }
-  .category-head{display:flex; align-items:center; gap:8px; margin-bottom:10px;}
-  .cat-dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
-  .cat-name{font-weight:700; font-size:0.92rem; flex:1;}
-  .cat-del-btn{
-    width:20px; height:20px; border-radius:50%; background:var(--paper-2); color:var(--muted);
-    font-size:0.8rem; display:flex; align-items:center; justify-content:center; opacity:0.6;
+  .string-tag:hover{background:var(--seal); color:var(--card);}
+
+  .cat-board-list{position:relative; display:flex; flex-direction:column; gap:10px; width:calc(100% - 46px);}
+  .cat-row{
+    display:flex; align-items:center; gap:8px;
+    background:var(--paper); border:1px solid rgba(107,68,35,0.3); border-radius:6px;
+    padding:10px 12px; cursor:pointer;
   }
-  .cat-del-btn:hover{opacity:1; background:var(--seal); color:var(--card);}
-  .cat-add-row{display:flex; gap:6px;}
-  .cat-add-row input{font-size:0.82rem; padding:7px 10px;}
-  .cat-year-input{flex:0 0 66px;}
-  .cat-event-input{flex:1;}
-  .cat-add-row button{
-    background:var(--paper-2); color:var(--ink); border-radius:5px; padding:7px 12px;
-    font-size:0.8rem; font-weight:700; flex-shrink:0;
+  .cat-row:hover{background:var(--paper-2);}
+  .cat-row.linking-from{outline:2px dashed var(--seal); outline-offset:2px;}
+  .cat-row-dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
+  .cat-row-name{flex:1; font-weight:700; font-size:0.9rem;}
+  .cat-connect-btn, .cat-row-del{
+    width:22px; height:22px; border-radius:50%;
+    background:var(--paper-2); color:var(--muted);
+    display:flex; align-items:center; justify-content:center; font-size:0.8rem;
+    opacity:0.7; flex-shrink:0;
   }
-  .cat-add-row button:hover{background:var(--spine); color:var(--card);}
-  .category-hint{font-size:0.8rem; color:var(--muted); text-align:center; padding:14px 4px;}
+  .cat-connect-btn:hover{background:var(--spine); color:var(--card); opacity:1;}
+  .cat-row-del:hover{background:var(--seal); color:var(--card); opacity:1;}
+  .cat-board-empty{font-size:0.85rem; color:var(--muted); text-align:center; padding:16px 4px; line-height:1.7;}
+
+  .cat-detail-head{margin-bottom:6px;}
+  .cat-back-btn{background:transparent; color:var(--muted); font-size:0.82rem; padding:4px 0;}
+  .cat-back-btn:hover{color:var(--ink);}
+  .cat-detail-title{display:flex; align-items:center; gap:8px; font-size:1.15rem; margin:4px 0 18px; font-weight:700;}
+  .cat-detail-title .cat-row-dot{width:12px; height:12px;}
+  .cat-detail-list{display:flex; flex-direction:column; gap:6px; margin-top:16px; max-height:260px; overflow-y:auto;}
+  .cat-detail-item{
+    display:flex; align-items:center; gap:10px;
+    background:var(--paper); border:1px solid rgba(107,68,35,0.2); border-radius:6px;
+    padding:8px 10px;
+  }
+  .cat-detail-year{font-weight:800; font-size:0.82rem; flex-shrink:0; width:52px;}
+  .cat-detail-name{flex:1; font-size:0.88rem; word-break:keep-all;}
+  .cat-detail-del{
+    width:19px; height:19px; border-radius:50%; background:var(--paper-2); color:var(--muted);
+    display:flex; align-items:center; justify-content:center; font-size:0.75rem; opacity:0.6; flex-shrink:0;
+  }
+  .cat-detail-del:hover{opacity:1; background:var(--seal); color:var(--card);}
+  .cat-detail-empty{font-size:0.82rem; color:var(--muted); text-align:center; padding:14px;}
+
+  .link-bar{
+    position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
+    background:var(--ink); color:var(--card);
+    padding:10px 14px; border-radius:8px;
+    display:none; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);
+    z-index:250; max-width:92vw;
+  }
+  .link-bar.show{display:flex;}
+  .link-bar span{font-size:0.82rem; white-space:nowrap;}
+  .link-bar input{
+    border:none; border-radius:5px; padding:7px 12px; font-size:0.82rem;
+    width:150px; font-family:'Nanum Myeongjo', serif; touch-action:manipulation;
+  }
+  .link-bar input:focus{outline:2px solid var(--gold);}
+  .link-bar button{border-radius:5px; padding:7px 14px; font-size:0.8rem; font-weight:700; white-space:nowrap;}
+  .link-bar .confirm-btn{background:var(--seal); color:var(--card);}
+  .link-bar .cancel-btn{background:rgba(255,255,255,0.15); color:var(--card);}
 
   @media (max-width:420px){
     header h1{font-size:3.2rem;}
@@ -329,23 +349,18 @@
       </div>
     </form>
 
-    <div class="category-section">
+    <div class="category-teaser">
       <div class="section-head">
         <h2>카테고리</h2>
       </div>
-      <div class="category-add-new">
-        <input type="text" id="categoryNameInput" placeholder="카테고리 이름 (예: 정치사)" maxlength="20" autocomplete="off">
-        <button type="button" id="addCategoryBtn">추가</button>
-      </div>
-      <div class="category-list" id="categoryList"></div>
+      <p class="section-hint">카테고리를 만들고 서로 연결해보세요</p>
+      <button type="button" class="game-start-btn" id="categoryOpenBtn">카테고리 보기</button>
     </div>
 
     <div class="section-head">
       <h2>타임라인</h2>
       <span class="count" id="countText"></span>
     </div>
-    <p class="section-hint">연결 버튼으로 사건끼리 선을 이어 인과관계를 표시해보세요</p>
-
     <div class="search-row">
       <input type="text" id="searchInput" placeholder="사건 이름으로 검색해서 연도 찾기" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     </div>
@@ -364,8 +379,8 @@
   </div>
 
   <div class="link-bar" id="linkBar">
-    <span id="linkBarText">연결할 사건을 선택하세요</span>
-    <input type="text" id="linkLabelInput" placeholder="관계 (예: 그래서 일어남)" style="display:none;">
+    <span id="linkBarText">연결할 카테고리를 선택하세요</span>
+    <input type="text" id="linkLabelInput" placeholder="관계 (예: 대립 관계)" style="display:none;">
     <button type="button" class="confirm-btn" id="linkConfirmBtn" style="display:none;">연결하기</button>
     <button type="button" class="cancel-btn" id="linkCancelBtn">취소</button>
   </div>
@@ -374,19 +389,29 @@
     <div class="game-modal" id="gameModal"></div>
   </div>
 
+  <div class="game-overlay" id="categoryOverlay">
+    <div class="game-modal" id="categoryModalBox"></div>
+  </div>
+
 <script>
 (function(){
   const SVG_NS = 'http://www.w3.org/2000/svg';
   const STORAGE_KEY = 'history-timeline-data';
   const LINK_ICON = '<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15L15 9"></path><path d="M10 6.5l1-1a4 4 0 0 1 5.5 5.5l-1 1"></path><path d="M14 17.5l-1 1a4 4 0 0 1-5.5-5.5l1-1"></path></svg>';
+  const CATEGORY_COLORS = ['#8B2318','#3F5D3A','#2E4057','#A9812E','#5C3A5C','#4A5D6B'];
 
   let events = [];
-  let connections = [];
   let categories = [];
-  let linkingFromId = null;
-  let pendingToId = null;
+  let categoryConnections = [];
 
-  const CATEGORY_COLORS = ['#8B2318','#3F5D3A','#2E4057','#A9812E','#5C3A5C','#4A5D6B'];
+  // 카테고리 화면 상태
+  let categoryScreen = 'board'; // 'board' | 'detail'
+  let categoryDetailId = null;
+  let catLinkFromId = null;
+  let catLinkToId = null;
+
+  let gameState = null;
+  let searchQuery = '';
 
   const mainArea = document.getElementById('mainArea');
   const countText = document.getElementById('countText');
@@ -395,10 +420,15 @@
   const eventInput = document.getElementById('eventInput');
   const hintText = document.getElementById('hintText');
   const saveBanner = document.getElementById('saveBanner');
+  const searchInput = document.getElementById('searchInput');
 
-  const categoryNameInput = document.getElementById('categoryNameInput');
-  const addCategoryBtn = document.getElementById('addCategoryBtn');
-  const categoryList = document.getElementById('categoryList');
+  const categoryOpenBtn = document.getElementById('categoryOpenBtn');
+  const categoryOverlay = document.getElementById('categoryOverlay');
+  const categoryModalBox = document.getElementById('categoryModalBox');
+
+  const gameStartBtn = document.getElementById('gameStartBtn');
+  const gameOverlay = document.getElementById('gameOverlay');
+  const gameModal = document.getElementById('gameModal');
 
   const linkBar = document.getElementById('linkBar');
   const linkBarText = document.getElementById('linkBarText');
@@ -406,41 +436,38 @@
   const linkConfirmBtn = document.getElementById('linkConfirmBtn');
   const linkCancelBtn = document.getElementById('linkCancelBtn');
 
-  const gameStartBtn = document.getElementById('gameStartBtn');
-  const searchInput = document.getElementById('searchInput');
-  let searchQuery = '';
+  addForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    handleAddSubmit();
+  });
+
   searchInput.addEventListener('input', function(){
     searchQuery = searchInput.value;
     render();
   });
-  const gameOverlay = document.getElementById('gameOverlay');
-  const gameModal = document.getElementById('gameModal');
-  let gameState = null;
+
+  categoryOpenBtn.addEventListener('click', function(){ openCategoryModal(); });
+  categoryOverlay.addEventListener('click', function(e){
+    if(e.target === categoryOverlay) closeCategoryModal();
+  });
 
   gameStartBtn.addEventListener('click', function(){ openGame(); });
   gameOverlay.addEventListener('click', function(e){
     if(e.target === gameOverlay) closeGame();
   });
 
-  addForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    handleAddSubmit();
-  });
-
-  addCategoryBtn.addEventListener('click', function(){ handleAddCategory(); });
-  categoryNameInput.addEventListener('keydown', function(e){
-    if(e.key === 'Enter'){ e.preventDefault(); addCategoryBtn.click(); }
-  });
-
-  linkCancelBtn.addEventListener('click', function(){ resetLinking(); });
-  linkConfirmBtn.addEventListener('click', function(){ handleLinkConfirm(); });
+  linkCancelBtn.addEventListener('click', function(){ resetCategoryLinking(); });
+  linkConfirmBtn.addEventListener('click', function(){ handleCategoryLinkConfirm(); });
   linkLabelInput.addEventListener('keydown', function(e){
     if(e.key === 'Enter'){ e.preventDefault(); linkConfirmBtn.click(); }
   });
+
   window.addEventListener('resize', function(){
-    clearTimeout(window.__tlResizeTimer);
-    window.__tlResizeTimer = setTimeout(function(){
-      if(connections.length > 0) drawStrings();
+    clearTimeout(window.__catResizeTimer);
+    window.__catResizeTimer = setTimeout(function(){
+      if(categoryOverlay.classList.contains('show') && categoryScreen === 'board' && categoryConnections.length > 0){
+        drawCategoryStrings();
+      }
     }, 150);
   });
 
@@ -461,12 +488,12 @@
         const parsed = JSON.parse(raw);
         if(Array.isArray(parsed)){
           events = parsed;
-          connections = [];
           categories = [];
+          categoryConnections = [];
         } else if(parsed && typeof parsed === 'object'){
           events = Array.isArray(parsed.events) ? parsed.events : [];
-          connections = Array.isArray(parsed.connections) ? parsed.connections : [];
           categories = Array.isArray(parsed.categories) ? parsed.categories : [];
+          categoryConnections = Array.isArray(parsed.categoryConnections) ? parsed.categoryConnections : [];
         }
       }
     }catch(e){
@@ -476,348 +503,23 @@
 
   function saveData(){
     try{
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({events, connections, categories}));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({events, categories, categoryConnections}));
       hideBanner();
     }catch(e){
       showBanner('※ 저장에 실패했어요: ' + (e && e.message ? e.message : '알 수 없는 오류'));
     }
   }
 
-  function handleAddCategory(){
-    const name = categoryNameInput.value.trim();
-    if(!name) return;
-    categories.push({
-      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
-      name: name,
-      color: CATEGORY_COLORS[categories.length % CATEGORY_COLORS.length]
-    });
-    categoryNameInput.value = '';
-    renderCategories();
-    saveData();
-  }
-
-  function deleteCategory(id){
-    categories = categories.filter(c => c.id !== id);
-    events.forEach(ev => { if(ev.categoryId === id) ev.categoryId = null; });
-    renderCategories();
-    render();
-    saveData();
-  }
-
-  function addCategoryEvent(categoryId, yearRaw, nameRaw){
-    const yearTrim = (yearRaw || '').trim();
-    const nameTrim = (nameRaw || '').trim();
-    if(!yearTrim || !nameTrim || !/^\d+$/.test(yearTrim)) return;
-    events.push({
-      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
-      year: parseInt(yearTrim, 10),
-      name: nameTrim,
-      categoryId: categoryId
-    });
-    render();
-    saveData();
-  }
-
-  function renderCategories(){
-    categoryList.innerHTML = '';
-    if(categories.length === 0){
-      categoryList.innerHTML = '<p class="category-hint">카테고리를 추가하면 분야별로 사건을 정리할 수 있어요. 여기서 기록하면 아래 타임라인에도 함께 나타나요.</p>';
-      return;
+  function shuffle(arr){
+    const a = [...arr];
+    for(let i = a.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
     }
-    categories.forEach(cat => {
-      const card = document.createElement('div');
-      card.className = 'category-card';
-
-      const head = document.createElement('div');
-      head.className = 'category-head';
-
-      const dot = document.createElement('span');
-      dot.className = 'cat-dot';
-      dot.style.background = cat.color;
-
-      const nameEl = document.createElement('span');
-      nameEl.className = 'cat-name';
-      nameEl.textContent = cat.name;
-
-      const del = document.createElement('button');
-      del.type = 'button';
-      del.className = 'cat-del-btn';
-      del.textContent = '×';
-      del.setAttribute('aria-label', cat.name + ' 카테고리 삭제');
-      del.addEventListener('click', () => deleteCategory(cat.id));
-
-      head.appendChild(dot);
-      head.appendChild(nameEl);
-      head.appendChild(del);
-
-      const addRow = document.createElement('div');
-      addRow.className = 'cat-add-row';
-
-      const yearIn = document.createElement('input');
-      yearIn.type = 'text';
-      yearIn.className = 'cat-year-input';
-      yearIn.placeholder = '연도';
-      yearIn.inputMode = 'numeric';
-      yearIn.setAttribute('pattern', '[0-9]*');
-      yearIn.autocomplete = 'off';
-
-      const eventIn = document.createElement('input');
-      eventIn.type = 'text';
-      eventIn.className = 'cat-event-input';
-      eventIn.placeholder = '사건 이름';
-      eventIn.autocomplete = 'off';
-
-      const addBtn = document.createElement('button');
-      addBtn.type = 'button';
-      addBtn.textContent = '추가';
-      addBtn.addEventListener('click', () => {
-        addCategoryEvent(cat.id, yearIn.value, eventIn.value);
-        yearIn.value = '';
-        eventIn.value = '';
-        yearIn.focus();
-      });
-      eventIn.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter'){ e.preventDefault(); addBtn.click(); }
-      });
-
-      addRow.appendChild(yearIn);
-      addRow.appendChild(eventIn);
-      addRow.appendChild(addBtn);
-
-      card.appendChild(head);
-      card.appendChild(addRow);
-      categoryList.appendChild(card);
-    });
+    return a;
   }
 
-  function resetLinking(){
-    linkingFromId = null;
-    pendingToId = null;
-    linkBar.classList.remove('show');
-    linkLabelInput.style.display = 'none';
-    linkConfirmBtn.style.display = 'none';
-    linkBarText.textContent = '연결할 사건을 선택하세요';
-    const highlighted = mainArea.querySelector('.card.linking-from');
-    if(highlighted) highlighted.classList.remove('linking-from');
-  }
-
-  function handleLinkClick(id, cardEl){
-    if(linkingFromId === null){
-      linkingFromId = id;
-      cardEl.classList.add('linking-from');
-      linkBarText.textContent = '연결할 다른 사건을 선택하세요';
-      linkLabelInput.style.display = 'none';
-      linkConfirmBtn.style.display = 'none';
-      linkBar.classList.add('show');
-    } else if(linkingFromId === id){
-      resetLinking();
-    } else {
-      pendingToId = id;
-      linkBarText.textContent = '어떤 관계인가요?';
-      linkLabelInput.style.display = 'inline-block';
-      linkLabelInput.value = '';
-      linkConfirmBtn.style.display = 'inline-block';
-      linkBar.classList.add('show');
-      linkLabelInput.focus();
-    }
-  }
-
-  function handleLinkConfirm(){
-    if(linkingFromId === null || pendingToId === null) return;
-    connections.push({
-      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
-      fromId: linkingFromId,
-      toId: pendingToId,
-      label: linkLabelInput.value.trim()
-    });
-    resetLinking();
-    render();
-    saveData();
-  }
-
-  function drawStrings(){
-    const wrap = mainArea.querySelector('.timeline-wrap');
-    if(!wrap) return;
-    const svg = wrap.querySelector('.string-layer');
-    const labelLayer = wrap.querySelector('.label-layer');
-    const list = wrap.querySelector('.timeline-list');
-    if(!svg || !labelLayer || !list) return;
-
-    const wrapRect = wrap.getBoundingClientRect();
-    svg.setAttribute('width', wrapRect.width);
-    svg.setAttribute('height', wrapRect.height);
-    svg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
-    svg.innerHTML = '';
-    labelLayer.innerHTML = '';
-
-    connections.forEach((conn, idx) => {
-      const rowA = list.querySelector(`[data-id="${conn.fromId}"]`);
-      const rowB = list.querySelector(`[data-id="${conn.toId}"]`);
-      if(!rowA || !rowB) return;
-      const cardA = rowA.querySelector('.card');
-      const cardB = rowB.querySelector('.card');
-      const rectA = cardA.getBoundingClientRect();
-      const rectB = cardB.getBoundingClientRect();
-      const p1 = { x: rectA.right - wrapRect.left, y: rectA.top - wrapRect.top + rectA.height/2 };
-      const p2 = { x: rectB.right - wrapRect.left, y: rectB.top - wrapRect.top + rectB.height/2 };
-      const bulge = 28 + (idx % 3) * 12;
-      const c1x = p1.x + bulge, c2x = p2.x + bulge;
-
-      const path = document.createElementNS(SVG_NS, 'path');
-      path.setAttribute('d', `M ${p1.x} ${p1.y} C ${c1x} ${p1.y}, ${c2x} ${p2.y}, ${p2.x} ${p2.y}`);
-      path.setAttribute('fill', 'none');
-      path.setAttribute('stroke', '#8B2318');
-      path.setAttribute('stroke-width', '1.6');
-      path.setAttribute('stroke-linecap', 'round');
-      path.setAttribute('opacity', '0.75');
-      svg.appendChild(path);
-
-      [p1, p2].forEach(p => {
-        const dot = document.createElementNS(SVG_NS, 'circle');
-        dot.setAttribute('cx', p.x);
-        dot.setAttribute('cy', p.y);
-        dot.setAttribute('r', '3.5');
-        dot.setAttribute('fill', '#8B2318');
-        svg.appendChild(dot);
-      });
-
-      const midX = (p1.x + p2.x) / 2 + bulge * 0.85;
-      const midY = (p1.y + p2.y) / 2;
-      const tag = document.createElement('div');
-      tag.className = 'string-tag';
-      tag.style.left = midX + 'px';
-      tag.style.top = midY + 'px';
-      tag.textContent = conn.label ? conn.label : '연결';
-      tag.title = '클릭하면 연결 삭제';
-      tag.addEventListener('click', () => {
-        connections = connections.filter(c => c.id !== conn.id);
-        render();
-        saveData();
-      });
-      labelLayer.appendChild(tag);
-    });
-  }
-
-  function render(){
-    const q = searchQuery.trim().toLowerCase();
-    let sorted = [...events].sort((a,b) => a.year - b.year);
-    if(q) sorted = sorted.filter(ev => ev.name.toLowerCase().includes(q));
-
-    if(q){
-      countText.textContent = `검색 결과 ${sorted.length}개`;
-    } else {
-      countText.textContent = events.length > 0 ? `총 ${events.length}개의 사건` : '';
-    }
-
-    if(sorted.length === 0){
-      const empty = document.createElement('div');
-      empty.className = 'empty-state';
-      const orn = document.createElement('div');
-      orn.className = 'ornament';
-      orn.setAttribute('aria-hidden', 'true');
-      orn.innerHTML = '<span></span><i></i><span></span>';
-      const p = document.createElement('p');
-      if(q){
-        p.textContent = `"${searchQuery.trim()}"와 일치하는 사건을 찾지 못했어요.`;
-      } else {
-        p.innerHTML = '아직 기록된 사건이 없어요.<br>위에서 첫 번째 역사적 사건을 추가해보세요.';
-      }
-      empty.appendChild(orn);
-      empty.appendChild(p);
-      mainArea.innerHTML = '';
-      mainArea.appendChild(empty);
-      return;
-    }
-
-    const wrap = document.createElement('div');
-    wrap.className = 'timeline-wrap';
-
-    const svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('class', 'string-layer');
-
-    const labelLayer = document.createElement('div');
-    labelLayer.className = 'label-layer';
-
-    const list = document.createElement('div');
-    list.className = 'timeline-list';
-
-    sorted.forEach((ev, i) => {
-      const row = document.createElement('div');
-      row.className = 'event-row';
-      row.dataset.id = ev.id;
-
-      const badge = document.createElement('div');
-      badge.className = 'year-badge';
-      badge.innerHTML = `<span class="num">${ev.year}</span>`;
-
-      const card = document.createElement('div');
-      card.className = 'card';
-      if(ev.id === linkingFromId) card.classList.add('linking-from');
-
-      const cat = ev.categoryId ? categories.find(c => c.id === ev.categoryId) : null;
-      if(cat) card.style.borderTopColor = cat.color;
-
-      const actions = document.createElement('div');
-      actions.className = 'card-actions';
-
-      const linkBtn = document.createElement('button');
-      linkBtn.type = 'button';
-      linkBtn.className = 'link-btn';
-      linkBtn.setAttribute('aria-label', `${ev.name}와 연결하기`);
-      linkBtn.innerHTML = LINK_ICON;
-      linkBtn.addEventListener('click', () => handleLinkClick(ev.id, card));
-
-      const del = document.createElement('button');
-      del.type = 'button';
-      del.className = 'del-btn';
-      del.setAttribute('aria-label', `${ev.name} 삭제`);
-      del.textContent = '×';
-      del.addEventListener('click', () => deleteEvent(ev.id));
-
-      actions.appendChild(linkBtn);
-      actions.appendChild(del);
-
-      const name = document.createElement('div');
-      name.className = 'event-name';
-      name.textContent = ev.name;
-
-      const yl = document.createElement('div');
-      yl.className = 'event-year-label';
-      yl.textContent = yearLabel(ev);
-
-      card.appendChild(actions);
-      card.appendChild(name);
-      card.appendChild(yl);
-
-      if(cat){
-        const catTag = document.createElement('div');
-        catTag.className = 'event-category';
-        catTag.innerHTML = `<span class="dot" style="background:${cat.color}"></span>${cat.name}`;
-        card.appendChild(catTag);
-      }
-
-      row.appendChild(badge);
-      row.appendChild(card);
-      list.appendChild(row);
-    });
-
-    wrap.appendChild(svg);
-    wrap.appendChild(labelLayer);
-    wrap.appendChild(list);
-
-    mainArea.innerHTML = '';
-    mainArea.appendChild(wrap);
-
-    requestAnimationFrame(drawStrings);
-  }
-
-  function deleteEvent(id){
-    events = events.filter(ev => ev.id !== id);
-    connections = connections.filter(c => c.fromId !== id && c.toId !== id);
-    if(linkingFromId === id || pendingToId === id) resetLinking();
-    render();
-    saveData();
-  }
+  // ---------- 메인 타임라인 ----------
 
   function handleAddSubmit(){
     const yearRaw = yearInput.value.trim();
@@ -853,6 +555,484 @@
     saveData();
   }
 
+  function deleteEvent(id){
+    events = events.filter(ev => ev.id !== id);
+    render();
+    saveData();
+    if(categoryOverlay.classList.contains('show') && categoryScreen === 'detail'){
+      renderCategoryDetail(categoryDetailId);
+    }
+  }
+
+  function render(){
+    const q = searchQuery.trim().toLowerCase();
+    let sorted = [...events].sort((a,b) => a.year - b.year);
+    if(q) sorted = sorted.filter(ev => ev.name.toLowerCase().includes(q));
+
+    if(q){
+      countText.textContent = `검색 결과 ${sorted.length}개`;
+    } else {
+      countText.textContent = events.length > 0 ? `총 ${events.length}개의 사건` : '';
+    }
+
+    if(sorted.length === 0){
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      const orn = document.createElement('div');
+      orn.className = 'ornament';
+      orn.setAttribute('aria-hidden', 'true');
+      orn.innerHTML = '<span></span><i></i><span></span>';
+      const p = document.createElement('p');
+      if(q){
+        p.textContent = `"${searchQuery.trim()}"와 일치하는 사건을 찾지 못했어요.`;
+      } else {
+        p.innerHTML = '아직 기록된 사건이 없어요.<br>위에서 첫 번째 역사적 사건을 추가해보세요.';
+      }
+      empty.appendChild(orn);
+      empty.appendChild(p);
+      mainArea.innerHTML = '';
+      mainArea.appendChild(empty);
+      return;
+    }
+
+    const list = document.createElement('div');
+    list.className = 'timeline-list';
+
+    sorted.forEach((ev) => {
+      const row = document.createElement('div');
+      row.className = 'event-row';
+      row.dataset.id = ev.id;
+
+      const badge = document.createElement('div');
+      badge.className = 'year-badge';
+      badge.innerHTML = `<span class="num">${ev.year}</span>`;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const cat = ev.categoryId ? categories.find(c => c.id === ev.categoryId) : null;
+      if(cat) card.style.borderTopColor = cat.color;
+
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'del-btn';
+      del.setAttribute('aria-label', `${ev.name} 삭제`);
+      del.textContent = '×';
+      del.addEventListener('click', () => deleteEvent(ev.id));
+      actions.appendChild(del);
+
+      const name = document.createElement('div');
+      name.className = 'event-name';
+      name.textContent = ev.name;
+
+      const yl = document.createElement('div');
+      yl.className = 'event-year-label';
+      yl.textContent = yearLabel(ev);
+
+      card.appendChild(actions);
+      card.appendChild(name);
+      card.appendChild(yl);
+
+      if(cat){
+        const catTag = document.createElement('div');
+        catTag.className = 'event-category';
+        catTag.innerHTML = `<span class="dot" style="background:${cat.color}"></span>${cat.name}`;
+        card.appendChild(catTag);
+      }
+
+      row.appendChild(badge);
+      row.appendChild(card);
+      list.appendChild(row);
+    });
+
+    mainArea.innerHTML = '';
+    mainArea.appendChild(list);
+  }
+
+  // ---------- 카테고리 전용화면 ----------
+
+  function openCategoryModal(){
+    categoryScreen = 'board';
+    categoryDetailId = null;
+    categoryOverlay.classList.add('show');
+    renderCategoryModal();
+  }
+
+  function closeCategoryModal(){
+    categoryOverlay.classList.remove('show');
+    resetCategoryLinking();
+  }
+
+  function handleAddCategory(nameInput){
+    const name = nameInput.value.trim();
+    if(!name) return;
+    categories.push({
+      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      name: name,
+      color: CATEGORY_COLORS[categories.length % CATEGORY_COLORS.length]
+    });
+    nameInput.value = '';
+    renderCategoryModal();
+    render();
+    saveData();
+  }
+
+  function deleteCategory(id){
+    categories = categories.filter(c => c.id !== id);
+    categoryConnections = categoryConnections.filter(cc => cc.fromId !== id && cc.toId !== id);
+    events.forEach(ev => { if(ev.categoryId === id) ev.categoryId = null; });
+    if(categoryDetailId === id){
+      categoryScreen = 'board';
+      categoryDetailId = null;
+    }
+    if(catLinkFromId === id || catLinkToId === id) resetCategoryLinking();
+    renderCategoryModal();
+    render();
+    saveData();
+  }
+
+  function addCategoryEvent(categoryId, yearRaw, nameRaw){
+    const yearTrim = (yearRaw || '').trim();
+    const nameTrim = (nameRaw || '').trim();
+    if(!yearTrim || !nameTrim || !/^\d+$/.test(yearTrim)) return;
+    events.push({
+      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      year: parseInt(yearTrim, 10),
+      name: nameTrim,
+      categoryId: categoryId
+    });
+    render();
+    saveData();
+    renderCategoryModal();
+  }
+
+  function resetCategoryLinking(){
+    catLinkFromId = null;
+    catLinkToId = null;
+    linkBar.classList.remove('show');
+    linkLabelInput.style.display = 'none';
+    linkConfirmBtn.style.display = 'none';
+    linkBarText.textContent = '연결할 카테고리를 선택하세요';
+    const highlighted = categoryModalBox.querySelector('.cat-row.linking-from');
+    if(highlighted) highlighted.classList.remove('linking-from');
+  }
+
+  function handleCategoryConnectClick(id, rowEl){
+    if(catLinkFromId === null){
+      catLinkFromId = id;
+      rowEl.classList.add('linking-from');
+      linkBarText.textContent = '연결할 다른 카테고리를 선택하세요';
+      linkLabelInput.style.display = 'none';
+      linkConfirmBtn.style.display = 'none';
+      linkBar.classList.add('show');
+    } else if(catLinkFromId === id){
+      resetCategoryLinking();
+    } else {
+      catLinkToId = id;
+      linkBarText.textContent = '어떤 관계인가요?';
+      linkLabelInput.style.display = 'inline-block';
+      linkLabelInput.value = '';
+      linkConfirmBtn.style.display = 'inline-block';
+      linkBar.classList.add('show');
+      linkLabelInput.focus();
+    }
+  }
+
+  function handleCategoryLinkConfirm(){
+    if(catLinkFromId === null || catLinkToId === null) return;
+    categoryConnections.push({
+      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      fromId: catLinkFromId,
+      toId: catLinkToId,
+      label: linkLabelInput.value.trim()
+    });
+    resetCategoryLinking();
+    renderCategoryModal();
+    saveData();
+  }
+
+  function drawCategoryStrings(){
+    const wrap = categoryModalBox.querySelector('.cat-board-wrap');
+    if(!wrap) return;
+    const svg = wrap.querySelector('.string-layer');
+    const labelLayer = wrap.querySelector('.label-layer');
+    const list = wrap.querySelector('.cat-board-list');
+    if(!svg || !labelLayer || !list) return;
+
+    const wrapRect = wrap.getBoundingClientRect();
+    svg.setAttribute('width', wrapRect.width);
+    svg.setAttribute('height', wrapRect.height);
+    svg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
+    svg.innerHTML = '';
+    labelLayer.innerHTML = '';
+
+    categoryConnections.forEach((conn, idx) => {
+      const rowA = list.querySelector(`[data-id="${conn.fromId}"]`);
+      const rowB = list.querySelector(`[data-id="${conn.toId}"]`);
+      if(!rowA || !rowB) return;
+      const rectA = rowA.getBoundingClientRect();
+      const rectB = rowB.getBoundingClientRect();
+      const p1 = { x: rectA.right - wrapRect.left, y: rectA.top - wrapRect.top + rectA.height/2 };
+      const p2 = { x: rectB.right - wrapRect.left, y: rectB.top - wrapRect.top + rectB.height/2 };
+      const bulge = 22 + (idx % 3) * 10;
+      const c1x = p1.x + bulge, c2x = p2.x + bulge;
+
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', `M ${p1.x} ${p1.y} C ${c1x} ${p1.y}, ${c2x} ${p2.y}, ${p2.x} ${p2.y}`);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', '#8B2318');
+      path.setAttribute('stroke-width', '1.6');
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('opacity', '0.75');
+      svg.appendChild(path);
+
+      [p1, p2].forEach(p => {
+        const dot = document.createElementNS(SVG_NS, 'circle');
+        dot.setAttribute('cx', p.x);
+        dot.setAttribute('cy', p.y);
+        dot.setAttribute('r', '3.5');
+        dot.setAttribute('fill', '#8B2318');
+        svg.appendChild(dot);
+      });
+
+      const midX = (p1.x + p2.x) / 2 + bulge * 0.85;
+      const midY = (p1.y + p2.y) / 2;
+      const tag = document.createElement('div');
+      tag.className = 'string-tag';
+      tag.style.left = midX + 'px';
+      tag.style.top = midY + 'px';
+      tag.textContent = conn.label ? conn.label : '연결';
+      tag.title = '클릭하면 연결 삭제';
+      tag.addEventListener('click', () => {
+        categoryConnections = categoryConnections.filter(c => c.id !== conn.id);
+        renderCategoryModal();
+        saveData();
+      });
+      labelLayer.appendChild(tag);
+    });
+  }
+
+  function renderCategoryBoard(){
+    categoryModalBox.innerHTML = '';
+
+    const h3 = document.createElement('h3');
+    h3.textContent = '카테고리';
+    categoryModalBox.appendChild(h3);
+
+    const addRow = document.createElement('div');
+    addRow.className = 'cat-add-new';
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.placeholder = '카테고리 이름 (예: 정치사)';
+    nameInput.maxLength = 20;
+    nameInput.autocomplete = 'off';
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.textContent = '추가';
+    addBtn.addEventListener('click', () => handleAddCategory(nameInput));
+    nameInput.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ e.preventDefault(); addBtn.click(); } });
+    addRow.appendChild(nameInput);
+    addRow.appendChild(addBtn);
+    categoryModalBox.appendChild(addRow);
+
+    if(categories.length === 0){
+      const p = document.createElement('p');
+      p.className = 'cat-board-empty';
+      p.textContent = '카테고리를 추가해보세요. 카테고리끼리 실로 연결하거나, 눌러서 그 안의 사건들을 볼 수 있어요.';
+      categoryModalBox.appendChild(p);
+    } else {
+      const wrap = document.createElement('div');
+      wrap.className = 'cat-board-wrap';
+
+      const svg = document.createElementNS(SVG_NS, 'svg');
+      svg.setAttribute('class', 'string-layer');
+
+      const labelLayer = document.createElement('div');
+      labelLayer.className = 'label-layer';
+
+      const list = document.createElement('div');
+      list.className = 'cat-board-list';
+
+      categories.forEach(cat => {
+        const row = document.createElement('div');
+        row.className = 'cat-row';
+        row.dataset.id = cat.id;
+        if(cat.id === catLinkFromId) row.classList.add('linking-from');
+
+        const dot = document.createElement('span');
+        dot.className = 'cat-row-dot';
+        dot.style.background = cat.color;
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'cat-row-name';
+        nameEl.textContent = cat.name;
+
+        const connectBtn = document.createElement('button');
+        connectBtn.type = 'button';
+        connectBtn.className = 'cat-connect-btn';
+        connectBtn.innerHTML = LINK_ICON;
+        connectBtn.setAttribute('aria-label', cat.name + ' 연결하기');
+        connectBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          handleCategoryConnectClick(cat.id, row);
+        });
+
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'cat-row-del';
+        delBtn.textContent = '×';
+        delBtn.setAttribute('aria-label', cat.name + ' 삭제');
+        delBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteCategory(cat.id);
+        });
+
+        row.addEventListener('click', () => {
+          categoryScreen = 'detail';
+          categoryDetailId = cat.id;
+          renderCategoryModal();
+        });
+
+        row.appendChild(dot);
+        row.appendChild(nameEl);
+        row.appendChild(connectBtn);
+        row.appendChild(delBtn);
+        list.appendChild(row);
+      });
+
+      wrap.appendChild(svg);
+      wrap.appendChild(labelLayer);
+      wrap.appendChild(list);
+      categoryModalBox.appendChild(wrap);
+
+      requestAnimationFrame(drawCategoryStrings);
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'game-close-btn';
+    closeBtn.textContent = '닫기';
+    closeBtn.addEventListener('click', closeCategoryModal);
+    categoryModalBox.appendChild(closeBtn);
+  }
+
+  function renderCategoryDetail(categoryId){
+    const cat = categories.find(c => c.id === categoryId);
+    if(!cat){
+      categoryScreen = 'board';
+      renderCategoryModal();
+      return;
+    }
+
+    categoryModalBox.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.className = 'cat-detail-head';
+    const backBtn = document.createElement('button');
+    backBtn.type = 'button';
+    backBtn.className = 'cat-back-btn';
+    backBtn.textContent = '← 목록으로';
+    backBtn.addEventListener('click', () => {
+      categoryScreen = 'board';
+      renderCategoryModal();
+    });
+    head.appendChild(backBtn);
+    categoryModalBox.appendChild(head);
+
+    const title = document.createElement('div');
+    title.className = 'cat-detail-title';
+    const dot = document.createElement('span');
+    dot.className = 'cat-row-dot';
+    dot.style.background = cat.color;
+    title.appendChild(dot);
+    title.appendChild(document.createTextNode(cat.name));
+    categoryModalBox.appendChild(title);
+
+    const addRow = document.createElement('div');
+    addRow.className = 'cat-add-new';
+    const yearIn = document.createElement('input');
+    yearIn.type = 'text';
+    yearIn.className = 'cat-year-narrow';
+    yearIn.placeholder = '연도';
+    yearIn.inputMode = 'numeric';
+    yearIn.setAttribute('pattern', '[0-9]*');
+    yearIn.autocomplete = 'off';
+    const eventIn = document.createElement('input');
+    eventIn.type = 'text';
+    eventIn.placeholder = '사건 이름';
+    eventIn.autocomplete = 'off';
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.textContent = '추가';
+    addBtn.addEventListener('click', () => {
+      addCategoryEvent(cat.id, yearIn.value, eventIn.value);
+      yearIn.value = '';
+      eventIn.value = '';
+      yearIn.focus();
+    });
+    eventIn.addEventListener('keydown', (e) => { if(e.key === 'Enter'){ e.preventDefault(); addBtn.click(); } });
+    addRow.appendChild(yearIn);
+    addRow.appendChild(eventIn);
+    addRow.appendChild(addBtn);
+    categoryModalBox.appendChild(addRow);
+
+    const catEvents = events.filter(ev => ev.categoryId === cat.id).sort((a,b) => a.year - b.year);
+    if(catEvents.length === 0){
+      const p = document.createElement('p');
+      p.className = 'cat-detail-empty';
+      p.textContent = '이 카테고리에 기록된 사건이 아직 없어요.';
+      categoryModalBox.appendChild(p);
+    } else {
+      const list = document.createElement('div');
+      list.className = 'cat-detail-list';
+      catEvents.forEach(ev => {
+        const item = document.createElement('div');
+        item.className = 'cat-detail-item';
+
+        const y = document.createElement('span');
+        y.className = 'cat-detail-year';
+        y.textContent = ev.year + '년';
+
+        const n = document.createElement('span');
+        n.className = 'cat-detail-name';
+        n.textContent = ev.name;
+
+        const del = document.createElement('button');
+        del.type = 'button';
+        del.className = 'cat-detail-del';
+        del.textContent = '×';
+        del.setAttribute('aria-label', ev.name + ' 삭제');
+        del.addEventListener('click', () => deleteEvent(ev.id));
+
+        item.appendChild(y);
+        item.appendChild(n);
+        item.appendChild(del);
+        list.appendChild(item);
+      });
+      categoryModalBox.appendChild(list);
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'game-close-btn';
+    closeBtn.textContent = '닫기';
+    closeBtn.addEventListener('click', closeCategoryModal);
+    categoryModalBox.appendChild(closeBtn);
+  }
+
+  function renderCategoryModal(){
+    if(categoryScreen === 'detail' && categoryDetailId){
+      renderCategoryDetail(categoryDetailId);
+    } else {
+      renderCategoryBoard();
+    }
+  }
+
+  // ---------- 게임 ----------
+
   function getGamePools(){
     const pools = [];
     if(events.length >= 2){
@@ -876,15 +1056,6 @@
   function closeGame(){
     gameOverlay.classList.remove('show');
     gameState = null;
-  }
-
-  function shuffle(arr){
-    const a = [...arr];
-    for(let i = a.length - 1; i > 0; i--){
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
   }
 
   function startGameWithPool(poolEvents){
@@ -1076,7 +1247,6 @@
   }
 
   loadData();
-  renderCategories();
   render();
 })();
 </script>
