@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>역사</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F5F2FF;
+    --paper-2:#EAE4FF;
+    --ink:#2B2250;
+    --muted:#8A82AA;
+    --spine:#8B7FE8;
+    --coral:#FF6B6B;
+    --yellow:#FFD166;
+    --mint:#06B889;
+    --pin:#E63946;
+    --card:#FFFFFF;
+    --shadow: 0 4px 14px rgba(43,34,80,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background-color:var(--paper);
+    background-image: radial-gradient(circle at 1px 1px, rgba(139,127,232,0.16) 1px, transparent 0);
+    background-size: 22px 22px;
+    color:var(--ink);
+    font-family:'Noto Sans KR', sans-serif;
+    min-height:100vh;
+  }
+  .app{max-width:720px; margin:0 auto; padding:36px 20px 90px;}
+
+  header{text-align:center; margin-bottom:26px;}
+  header .icon{font-size:2rem; display:block; margin-bottom:4px;}
+  header h1{font-family:'Gaegu', cursive; font-size:2.3rem; margin:0 0 6px; letter-spacing:0.5px;}
+  header p{color:var(--muted); font-size:0.92rem; margin:0;}
+
+  .add-card{
+    background:var(--card);
+    border-radius:18px;
+    padding:22px 20px 20px;
+    box-shadow:var(--shadow);
+    position:relative;
+    margin-bottom:44px;
+  }
+  .add-card::before{
+    content:'';
+    position:absolute;
+    top:-9px; left:50%; transform:translateX(-50%);
+    width:16px; height:16px; border-radius:50%;
+    background:var(--coral);
+    box-shadow:0 2px 5px rgba(0,0,0,0.25);
+  }
+  .add-row{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px;}
+  .field-year{flex:0 0 110px;}
+  .field-event{flex:1; min-width:180px;}
+
+  input[type="text"]{
+    width:100%;
+    border:2px solid var(--paper-2);
+    border-radius:10px;
+    padding:10px 12px;
+    font-family:'Noto Sans KR', sans-serif;
+    font-size:0.95rem;
+    background:var(--paper);
+    color:var(--ink);
+    transition:border-color .15s;
+    touch-action:manipulation;
+  }
+  input:focus{outline:none; border-color:var(--spine);}
+  input:focus-visible{outline:3px solid var(--spine); outline-offset:1px;}
+
+  .add-bottom-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
+  .hint{font-size:0.78rem; color:var(--muted);}
+  .hint.error{color:var(--coral); font-weight:700;}
+
+  button{font-family:'Noto Sans KR', sans-serif; cursor:pointer; border:none; touch-action:manipulation;}
+  button:focus-visible{outline:3px solid var(--spine); outline-offset:2px;}
+
+  .add-btn{
+    background:var(--mint); color:#fff; font-weight:700;
+    border-radius:999px; padding:11px 24px; font-size:0.95rem;
+    box-shadow:0 3px 0 rgba(0,0,0,0.08);
+    transition:transform .12s;
+    flex-shrink:0;
+  }
+  .add-btn:hover{transform:translateY(-1px);}
+  .add-btn:active{transform:translateY(1px);}
+
+  .section-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:6px; padding:0 4px;}
+  .section-head h2{font-family:'Gaegu', cursive; font-size:1.3rem; margin:0;}
+  .count{font-size:0.82rem; color:var(--muted);}
+  .section-hint{font-size:0.78rem; color:var(--muted); margin:0 4px 18px;}
+
+  .debug-box{
+    font-family:'DM Mono', 'Courier New', monospace;
+    font-size:0.72rem; line-height:1.5; color:var(--ink);
+    background:var(--paper-2); border-radius:10px; padding:10px 12px;
+    margin:-24px 0 30px; white-space:pre-wrap; word-break:break-all;
+    max-height:160px; overflow-y:auto;
+  }
+
+  .loading{text-align:center; color:var(--muted); padding:40px 0; font-size:0.9rem;}
+
+  .banner{
+    display:none;
+    background:#FFF3CD; color:#7A5B00; border:1px solid #FFE29A;
+    border-radius:10px; padding:10px 14px; font-size:0.82rem;
+    margin-bottom:20px; line-height:1.5;
+  }
+  .banner.show{display:block;}
+
+  .timeline-wrap{position:relative;}
+  .string-layer{position:absolute; top:0; left:0; pointer-events:none; overflow:visible;}
+  .label-layer{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none;}
+  .string-tag{
+    position:absolute; transform:translate(-50%,-50%) rotate(-2deg);
+    background:var(--yellow); color:var(--ink); font-size:0.68rem; font-weight:700;
+    padding:3px 9px; border-radius:4px; box-shadow:var(--shadow);
+    pointer-events:auto; cursor:pointer; white-space:nowrap;
+    max-width:130px; overflow:hidden; text-overflow:ellipsis;
+    transition:background .12s, color .12s;
+  }
+  .string-tag:hover{background:var(--pin); color:#fff;}
+
+  .timeline-list{position:relative; padding:4px 0; width:calc(100% - 46px);}
+  .timeline-list::before{
+    content:'';
+    position:absolute;
+    left:27px; top:4px; bottom:4px; width:3px;
+    background:repeating-linear-gradient(to bottom, var(--spine) 0 8px, transparent 8px 16px);
+    border-radius:2px;
+  }
+
+  .event-row{display:flex; gap:16px; align-items:flex-start; position:relative; margin-bottom:22px;}
+  .event-row:last-child{margin-bottom:0;}
+
+  .year-badge{
+    flex:0 0 56px; width:56px; height:56px; border-radius:50%;
+    background:var(--card); border:3px solid var(--spine);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow); position:relative; z-index:1;
+  }
+  .year-badge .num{font-family:'Gaegu', cursive; font-weight:700; font-size:1.05rem; line-height:1;}
+
+  .card{
+    flex:1; background:var(--card); border-radius:14px;
+    padding:16px 18px 14px; box-shadow:var(--shadow);
+    position:relative; margin-top:5px; min-width:0;
+  }
+  .card::before{
+    content:'';
+    position:absolute; top:-8px; left:18px; width:52px; height:15px;
+    background:var(--tape-color, var(--coral)); opacity:0.8;
+    transform:rotate(-3deg); border-radius:2px;
+  }
+  .event-row:nth-child(odd) .card{transform:rotate(-0.5deg);}
+  .event-row:nth-child(even) .card{transform:rotate(0.5deg);}
+  .card.linking-from{outline:3px dashed var(--coral); outline-offset:3px;}
+
+  .card .event-name{font-weight:700; font-size:1.02rem; word-break:keep-all; padding-right:58px;}
+  .card .event-year-label{font-size:0.76rem; color:var(--muted); margin-top:3px;}
+
+  .card-actions{position:absolute; top:8px; right:8px; display:flex; gap:6px;}
+  .link-btn, .del-btn{
+    width:22px; height:22px; border-radius:50%;
+    background:var(--paper-2); color:var(--muted);
+    font-size:0.78rem; line-height:1; display:flex; align-items:center; justify-content:center;
+    opacity:0.55; transition:opacity .12s, background .12s, color .12s;
+  }
+  .link-btn:hover, .link-btn:focus-visible{opacity:1; background:var(--spine); color:#fff;}
+  .del-btn{font-size:0.85rem;}
+  .del-btn:hover, .del-btn:focus-visible{opacity:1; background:var(--coral); color:#fff;}
+
+  .link-bar{
+    position:fixed; left:50%; bottom:22px; transform:translateX(-50%);
+    background:var(--ink); color:#fff;
+    padding:10px 14px; border-radius:999px;
+    display:none; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;
+    box-shadow:0 6px 20px rgba(0,0,0,0.25);
+    z-index:100; max-width:92vw;
+  }
+  .link-bar.show{display:flex;}
+  .link-bar span{font-size:0.82rem; white-space:nowrap;}
+  .link-bar input{
+    border:none; border-radius:999px; padding:7px 12px; font-size:0.82rem;
+    width:150px; font-family:'Noto Sans KR', sans-serif; touch-action:manipulation;
+  }
+  .link-bar input:focus{outline:2px solid var(--mint);}
+  .link-bar button{border-radius:999px; padding:7px 14px; font-size:0.8rem; font-weight:700; white-space:nowrap;}
+  .link-bar .confirm-btn{background:var(--mint); color:#fff;}
+  .link-bar .cancel-btn{background:rgba(255,255,255,0.15); color:#fff;}
+
+  .empty-state{
+    text-align:center; padding:44px 20px;
+    border:2px dashed var(--paper-2); border-radius:16px;
+    color:var(--muted);
+  }
+  .empty-state .icon{font-size:2.1rem; display:block; margin-bottom:10px;}
+  .empty-state p{margin:0; font-size:0.92rem;}
+
+  @media (max-width:420px){
+    header h1{font-size:1.9rem;}
+    .link-bar input{width:120px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    * {transition:none !important;}
+    .event-row:nth-child(odd) .card, .event-row:nth-child(even) .card{transform:none;}
+  }
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <span class="icon" aria-hidden="true">📜</span>
+      <h1>역사</h1>
+      <p>년도와 사건을 적으면 자동으로 시간 순서대로 정리돼요</p>
+    </header>
+
+    <div class="banner" id="saveBanner"></div>
+
+    <form class="add-card" id="addForm">
+      <div class="add-row">
+        <div class="field-year">
+          <input type="text" id="yearInput" placeholder="연도" aria-label="연도" inputmode="numeric" pattern="[0-9]*" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="field-event">
+          <input type="text" id="eventInput" placeholder="사건 이름 (예: 조선 건국)" aria-label="사건 이름" maxlength="60" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+      </div>
+      <div class="add-bottom-row">
+        <span class="hint" id="hintText">연도 → 사건 이름 순서로 입력해요</span>
+        <button type="submit" class="add-btn">기록 추가 ✏️</button>
+      </div>
+    </form>
+
+    <div class="debug-box" id="debugBox">🔧 디버그: 대기 중...</div>
+
+    <div class="section-head">
+      <h2>타임라인</h2>
+      <span class="count" id="countText"></span>
+    </div>
+    <p class="section-hint">🔗 버튼으로 사건끼리 실로 연결해서 인과관계를 표시해보세요</p>
+
+    <div id="mainArea">
+      <div class="loading">불러오는 중...</div>
+    </div>
+  </div>
+
+  <div class="link-bar" id="linkBar">
+    <span id="linkBarText">🔗 연결할 사건을 선택하세요</span>
+    <input type="text" id="linkLabelInput" placeholder="관계 (예: 그래서 일어남)" style="display:none;">
+    <button type="button" class="confirm-btn" id="linkConfirmBtn" style="display:none;">연결하기</button>
+    <button type="button" class="cancel-btn" id="linkCancelBtn">취소</button>
+  </div>
+
+<script>
+(function(){
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const STORAGE_KEY = 'timeline-events';
+
+  let events = [];
+  let connections = [];
+  let linkingFromId = null;
+  let pendingToId = null;
+  let storageAvailable = false;
+
+  const mainArea = document.getElementById('mainArea');
+  const countText = document.getElementById('countText');
+  const addForm = document.getElementById('addForm');
+  const yearInput = document.getElementById('yearInput');
+  const eventInput = document.getElementById('eventInput');
+  const hintText = document.getElementById('hintText');
+  const saveBanner = document.getElementById('saveBanner');
+  const debugBox = document.getElementById('debugBox');
+
+  function logDebug(msg){
+    try{
+      const time = new Date().toLocaleTimeString('ko-KR', {hour12:false});
+      const line = `[${time}] ${msg}`;
+      const lines = debugBox.textContent.split('\n').filter(l => l && l !== '🔧 디버그: 대기 중...');
+      lines.push(line);
+      while(lines.length > 8) lines.shift();
+      debugBox.textContent = lines.join('\n');
+      debugBox.scrollTop = debugBox.scrollHeight;
+    }catch(e){ /* 디버그 표시 자체가 실패해도 앱은 계속 동작해야 함 */ }
+  }
+
+  const linkBar = document.getElementById('linkBar');
+  const linkBarText = document.getElementById('linkBarText');
+  const linkLabelInput = document.getElementById('linkLabelInput');
+  const linkConfirmBtn = document.getElementById('linkConfirmBtn');
+  const linkCancelBtn = document.getElementById('linkCancelBtn');
+
+  const tapeColors = ['#FF6B6B', '#FFD166', '#06B889', '#8B7FE8'];
+
+  // ----- 버튼/폼 동작을 가장 먼저 연결 (저장소 관련 코드보다 먼저) -----
+  // 이렇게 해두면 저장 기능에 무슨 문제가 생기더라도 "기록 추가" 버튼 자체는 항상 반응함
+
+  addForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    handleAddSubmit();
+  });
+
+  linkCancelBtn.addEventListener('click', function(){
+    resetLinking();
+  });
+
+  linkConfirmBtn.addEventListener('click', function(){
+    handleLinkConfirm();
+  });
+
+  linkLabelInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      e.preventDefault();
+      linkConfirmBtn.click();
+    }
+  });
+
+  window.addEventListener('resize', function(){
+    clearTimeout(window.__tlResizeTimer);
+    window.__tlResizeTimer = setTimeout(function(){
+      if(connections.length > 0) drawStrings();
+    }, 150);
+  });
+
+  // ----- 아래는 일반 함수 정의들 -----
+
+  function yearLabel(ev){ return ev.year + '년'; }
+
+  function showBanner(msg){
+    saveBanner.textContent = msg;
+    saveBanner.classList.add('show');
+  }
+  function hideBanner(){
+    saveBanner.classList.remove('show');
+  }
+
+  async function loadData(){
+    if(!storageAvailable){
+      showBanner('⚠️ 이 화면에서는 자동 저장이 지원되지 않아요. 지금 추가하는 기록은 새로고침하면 사라져요.');
+      return;
+    }
+    try{
+      const res = await window.storage.get(STORAGE_KEY, false);
+      if(res && res.value){
+        const parsed = JSON.parse(res.value);
+        if(Array.isArray(parsed)){
+          events = parsed;
+          connections = [];
+        } else if(parsed && typeof parsed === 'object'){
+          events = Array.isArray(parsed.events) ? parsed.events : [];
+          connections = Array.isArray(parsed.connections) ? parsed.connections : [];
+        }
+      }
+    }catch(e){
+      // 저장된 기록이 아직 없는 경우 (처음 사용) — 빈 상태로 시작, 정상 상황
+    }
+  }
+
+  async function saveData(){
+    if(!storageAvailable) return;
+    try{
+      const result = await window.storage.set(STORAGE_KEY, JSON.stringify({events, connections}), false);
+      if(!result){
+        showBanner('⚠️ 방금 변경 사항이 저장되지 않았어요. 새로고침하면 사라질 수 있어요.');
+      }else{
+        hideBanner();
+      }
+    }catch(e){
+      showBanner('⚠️ 저장 중 오류가 발생했어요: ' + (e && e.message ? e.message : '알 수 없는 오류'));
+    }
+  }
+
+  function resetLinking(){
+    linkingFromId = null;
+    pendingToId = null;
+    linkBar.classList.remove('show');
+    linkLabelInput.style.display = 'none';
+    linkConfirmBtn.style.display = 'none';
+    linkBarText.textContent = '🔗 연결할 사건을 선택하세요';
+    const highlighted = mainArea.querySelector('.card.linking-from');
+    if(highlighted) highlighted.classList.remove('linking-from');
+  }
+
+  function handleLinkClick(id, cardEl){
+    if(linkingFromId === null){
+      linkingFromId = id;
+      cardEl.classList.add('linking-from');
+      linkBarText.textContent = '🔗 연결할 다른 사건을 선택하세요';
+      linkLabelInput.style.display = 'none';
+      linkConfirmBtn.style.display = 'none';
+      linkBar.classList.add('show');
+    } else if(linkingFromId === id){
+      resetLinking();
+    } else {
+      pendingToId = id;
+      linkBarText.textContent = '어떤 관계인가요?';
+      linkLabelInput.style.display = 'inline-block';
+      linkLabelInput.value = '';
+      linkConfirmBtn.style.display = 'inline-block';
+      linkBar.classList.add('show');
+      linkLabelInput.focus();
+    }
+  }
+
+  async function handleLinkConfirm(){
+    if(linkingFromId === null || pendingToId === null) return;
+    connections.push({
+      id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      fromId: linkingFromId,
+      toId: pendingToId,
+      label: linkLabelInput.value.trim()
+    });
+    resetLinking();
+    render();
+    await saveData();
+  }
+
+  function drawStrings(){
+    const wrap = mainArea.querySelector('.timeline-wrap');
+    if(!wrap) return;
+    const svg = wrap.querySelector('.string-layer');
+    const labelLayer = wrap.querySelector('.label-layer');
+    const list = wrap.querySelector('.timeline-list');
+    if(!svg || !labelLayer || !list) return;
+
+    const wrapRect = wrap.getBoundingClientRect();
+    svg.setAttribute('width', wrapRect.width);
+    svg.setAttribute('height', wrapRect.height);
+    svg.setAttribute('viewBox', `0 0 ${wrapRect.width} ${wrapRect.height}`);
+    svg.innerHTML = '';
+    labelLayer.innerHTML = '';
+
+    connections.forEach((conn, idx) => {
+      const rowA = list.querySelector(`[data-id="${conn.fromId}"]`);
+      const rowB = list.querySelector(`[data-id="${conn.toId}"]`);
+      if(!rowA || !rowB) return;
+      const cardA = rowA.querySelector('.card');
+      const cardB = rowB.querySelector('.card');
+      const rectA = cardA.getBoundingClientRect();
+      const rectB = cardB.getBoundingClientRect();
+      const p1 = { x: rectA.right - wrapRect.left, y: rectA.top - wrapRect.top + rectA.height/2 };
+      const p2 = { x: rectB.right - wrapRect.left, y: rectB.top - wrapRect.top + rectB.height/2 };
+      const bulge = 24 + (idx % 3) * 10;
+      const c1x = p1.x + bulge, c2x = p2.x + bulge;
+
+      const path = document.createElementNS(SVG_NS, 'path');
+      path.setAttribute('d', `M ${p1.x} ${p1.y} C ${c1x} ${p1.y}, ${c2x} ${p2.y}, ${p2.x} ${p2.y}`);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', '#E63946');
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('stroke-linecap', 'round');
+      path.setAttribute('opacity', '0.8');
+      svg.appendChild(path);
+
+      [p1, p2].forEach(p => {
+        const dot = document.createElementNS(SVG_NS, 'circle');
+        dot.setAttribute('cx', p.x);
+        dot.setAttribute('cy', p.y);
+        dot.setAttribute('r', '4');
+        dot.setAttribute('fill', '#E63946');
+        svg.appendChild(dot);
+      });
+
+      const midX = (p1.x + p2.x) / 2 + bulge * 0.85;
+      const midY = (p1.y + p2.y) / 2;
+      const tag = document.createElement('div');
+      tag.className = 'string-tag';
+      tag.style.left = midX + 'px';
+      tag.style.top = midY + 'px';
+      tag.textContent = conn.label ? conn.label : '🔗';
+      tag.title = '클릭하면 연결 삭제';
+      tag.addEventListener('click', async () => {
+        connections = connections.filter(c => c.id !== conn.id);
+        render();
+        await saveData();
+      });
+      labelLayer.appendChild(tag);
+    });
+  }
+
+  function render(){
+    const sorted = [...events].sort((a,b) => a.year - b.year);
+    countText.textContent = events.length > 0 ? `총 ${events.length}개의 사건` : '';
+
+    if(sorted.length === 0){
+      mainArea.innerHTML = `
+        <div class="empty-state">
+          <span class="icon" aria-hidden="true">🖋️</span>
+          <p>아직 기록된 사건이 없어요.<br>위에서 첫 번째 역사적 사건을 추가해보세요!</p>
+        </div>`;
+      return;
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'timeline-wrap';
+
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('class', 'string-layer');
+
+    const labelLayer = document.createElement('div');
+    labelLayer.className = 'label-layer';
+
+    const list = document.createElement('div');
+    list.className = 'timeline-list';
+
+    sorted.forEach((ev, i) => {
+      const row = document.createElement('div');
+      row.className = 'event-row';
+      row.dataset.id = ev.id;
+
+      const badge = document.createElement('div');
+      badge.className = 'year-badge';
+      badge.innerHTML = `<span class="num">${ev.year}</span>`;
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.setProperty('--tape-color', tapeColors[i % tapeColors.length]);
+      if(ev.id === linkingFromId) card.classList.add('linking-from');
+
+      const actions = document.createElement('div');
+      actions.className = 'card-actions';
+
+      const linkBtn = document.createElement('button');
+      linkBtn.type = 'button';
+      linkBtn.className = 'link-btn';
+      linkBtn.setAttribute('aria-label', `${ev.name}와 연결하기`);
+      linkBtn.textContent = '🔗';
+      linkBtn.addEventListener('click', () => handleLinkClick(ev.id, card));
+
+      const del = document.createElement('button');
+      del.type = 'button';
+      del.className = 'del-btn';
+      del.setAttribute('aria-label', `${ev.name} 삭제`);
+      del.textContent = '×';
+      del.addEventListener('click', () => deleteEvent(ev.id));
+
+      actions.appendChild(linkBtn);
+      actions.appendChild(del);
+
+      const name = document.createElement('div');
+      name.className = 'event-name';
+      name.textContent = ev.name;
+
+      const yl = document.createElement('div');
+      yl.className = 'event-year-label';
+      yl.textContent = yearLabel(ev);
+
+      card.appendChild(actions);
+      card.appendChild(name);
+      card.appendChild(yl);
+
+      row.appendChild(badge);
+      row.appendChild(card);
+      list.appendChild(row);
+    });
+
+    wrap.appendChild(svg);
+    wrap.appendChild(labelLayer);
+    wrap.appendChild(list);
+
+    mainArea.innerHTML = '';
+    mainArea.appendChild(wrap);
+
+    requestAnimationFrame(drawStrings);
+  }
+
+  async function deleteEvent(id){
+    events = events.filter(ev => ev.id !== id);
+    connections = connections.filter(c => c.fromId !== id && c.toId !== id);
+    if(linkingFromId === id || pendingToId === id) resetLinking();
+    render();
+    await saveData();
+  }
+
+  async function handleAddSubmit(){
+    try{
+      const yearRawFull = yearInput.value;
+      const nameFull = eventInput.value;
+      const yearRaw = yearRawFull.trim();
+      const name = nameFull.trim();
+
+      logDebug(`제출: year="${yearRawFull}"(길이 ${yearRawFull.length}) name="${nameFull}"(길이 ${nameFull.length})`);
+
+      if(!yearRaw || !name){
+        hintText.textContent = '연도와 사건 이름을 모두 입력해주세요';
+        hintText.classList.add('error');
+        logDebug('→ 중단: 연도 또는 이름이 비어있음');
+        return;
+      }
+      if(!/^\d+$/.test(yearRaw)){
+        hintText.textContent = '연도는 숫자만 입력해주세요';
+        hintText.classList.add('error');
+        logDebug('→ 중단: 연도가 숫자 형식이 아님 ("' + yearRaw + '")');
+        return;
+      }
+      const year = parseInt(yearRaw, 10);
+
+      hintText.textContent = '연도 → 사건 이름 순서로 입력해요';
+      hintText.classList.remove('error');
+
+      events.push({
+        id: Date.now() + '-' + Math.random().toString(36).slice(2,7),
+        year: year,
+        name: name
+      });
+
+      logDebug(`→ 배열에 추가됨 (현재 총 ${events.length}개), 화면 그리기 시도...`);
+      render();
+      logDebug('→ 화면 그리기 완료');
+
+      eventInput.value = '';
+      yearInput.value = '';
+      yearInput.focus();
+
+      await saveData();
+      logDebug('→ 저장 시도 완료 (저장소 가능여부: ' + storageAvailable + ')');
+    }catch(e){
+      logDebug('🚨 예외 발생: ' + (e && e.message ? e.message : e));
+      console.error(e);
+    }
+  }
+
+  // ----- 초기화: 저장소 관련 코드는 여기서부터, 전부 try/catch로 감쌈 -----
+  (async function init(){
+    try{
+      storageAvailable = (typeof window.storage !== 'undefined' && window.storage !== null);
+    }catch(e){
+      storageAvailable = false;
+    }
+    logDebug('초기화: 저장소 사용 가능 = ' + storageAvailable);
+
+    try{
+      await loadData();
+      logDebug('불러오기 완료: 사건 ' + events.length + '개, 연결 ' + connections.length + '개');
+    }catch(e){
+      logDebug('🚨 불러오기 실패: ' + (e && e.message ? e.message : e));
+      console.error('불러오기 실패', e);
+    }
+
+    try{
+      render();
+    }catch(e){
+      console.error('렌더링 실패', e);
+      mainArea.innerHTML = '<div class="empty-state"><p>화면을 그리는 중 문제가 발생했어요.<br>새로고침해서 다시 열어봐 주세요.</p></div>';
+    }
+  })();
+})();
+</script>
+</body>
+</html>
